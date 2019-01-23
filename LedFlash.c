@@ -17,3 +17,17 @@ int main()
     }
     return 0;
 }
+
+
+#include <yoda.h>
+int main()
+{
+    int num = 0;
+    void led_init();  // Initierar led-lampor
+    
+    while(1){
+        void led_toggle(num);
+        delay(1000);
+    }
+    return 0;
+}
