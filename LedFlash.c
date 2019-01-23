@@ -8,26 +8,8 @@ int main()
     void led_init();  // Initierar led-lampor
     
     while(1){
-        void led_on(num);
-        printf("LED on\n");
-        delay(1000);
-        void led_off(num);
-        printf("LED off\n");
-        delay(1000);
-    }
-    return 0;
-}
-
-
-#include <yoda.h>
-int main()
-{
-    int num = 0;
-    void led_init();  // Initierar led-lampor
-    
-    while(1){
-        void led_toggle(num);
-        delay(1000);
+        void led_toggle(num); // togglar av och på
+        delay(1000); // väntar 1 sekund
     }
     return 0;
 }
