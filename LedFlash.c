@@ -4,7 +4,7 @@
 #include <yoda.h>
 int main()
 {
-    int num = 1;
+    int num = 0;
     void led_init();  // Initierar led-lampor
     
     while(1){
