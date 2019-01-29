@@ -6,18 +6,20 @@
 
 int main()
 {
-    uint8_t numLed = 0;
-    uint8_t numButton = 1;
-    
     led_init();    // Initierar led-lampor
     button_init(); // Initierar buttom
 
+    unsigned int current;
+    unsigned int previous = 0;
+
     while (1)
     {
-        if (button_read(numButton) == 1)
+        current = button_read(1);
+        if (current > previous)
         {
-        led_toggle(numLed);
+            led_toggle(0);
         }
+        previous = current;
     }
     return 0;
 }

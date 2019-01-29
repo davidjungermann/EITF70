@@ -7,13 +7,13 @@
 
 int main()
 {
-    uint8_t num = 0;
+    unsigned int num = 0;
     led_init(); // Initierar led-lampor
 
     while (1)
     {
         led_toggle(num); // togglar av och på
-        _ms_delay(1000);      // väntar 1 sekund
+        _delay_ms(1000); // väntar 1 sekund
     }
     return 0;
 }

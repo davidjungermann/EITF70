@@ -1,0 +1,101 @@
+CPU Architecture
+1.1 What is the difference between a Harvard and a Von Neumann architecture?
+Ans: A von Neumann architecture has one single memory for both data and instructions. 
+A Harvard architecture has separate memories for data and instructions, which speeds up the execution. 
+
+1.2 What is the frequency of a modern processor, say Intel or AMD?
+Ans: A high end processor has around 4Ghz base clock speed with turbo boost going up to 5 Ghz. 
+
+1.3 How many CPU cores does an AVR have? What about the latest AMD Ryzen or Intel Core i9?
+Ans: The AVR has 1 core. The latest Intel i9 has 8 cores. However, a AMD Threadripper has 32 cores. 
+
+1.4 What is the size of the RAM in the Atmega1284? 
+Ans: 16,384 bytes, so roughly 16 kB. 
+
+1.5 What is the size of the flash memory in the Atmega1284?
+Ans: 128 kB
+
+1.6 How much RAM do you have in a modern computer?
+Ans: Anywhere from 4 GB to 128 GB is not unusual to see. Usually 8 GB is considered "enough". 
+
+1.7 Using an Atmega1284, how many instructions can you execute in 1 second, if each instruction takes
+one clock cycle each?
+Ans: It runs at 16 MHz, whichn yields 16 000 000 instructions in a clock cycle. 
+
+1.8 Running at 8 MHz, how many nanoseconds does each instruction have to execute?
+Ans:f = 1/T => T = 1/8*10^6 = 125 nanoseconds. 
+
+1.9 How is the value 0x12FC6701 stored in a memory using little-endian?
+Ans: 
+n = 0x01
+n+1 = 0x67
+n+2 = 0xFC
+n+3 = 0x12
+
+1.10 If your compiled code resides in the address range 0x00-0xFF in the processor, will you overwrite the
+program if you store an array starting at address 0x00? The target processor is an AVR.
+Ans: No. The compiled code is stored in RAM, where as the arrray is stored in the flash memory. 
+
+1.11 What is the size of a char for an AVR?
+Ans: 1 byte
+
+1.12 What is the size of an int for an AVR?
+Ans: 2 byte
+
+1.13 What is the size of an unsigned int for an AVR?
+Ans: 2 byte 
+
+1.14 If you store -2 in an int variable, what is the hexadecimal representation?
+Ans: 0xFFFE 
+
+1.15 If you store -2 in an unsigned int, what is the hexadecimal representation?
+Ans: 0xFFFE
+
+1.16 If you add two 8-bit numbers, how many bits does the result require?
+Ans: 9 bits. One byte for the carry. 
+
+1.17 If you multiply two 8-bit numbers, how many bits does the result require? // Öva mer! 
+Ans: log2(2^8 - 1) * log(2^8-1) = 16 bits. 
+
+1.18 Given the following C code, how many variables are created, how large are they, and in which memory segments are they stored?
+
+int alpha = 1;
+char vec[3] = { 1, 2, 3 };
+char state;
+int main()
+{
+static char statham = 666;
+for (int i = 0; i < 10; i++) {
+int looper = 12;
+}
+while (1) {
+// wait for better times...
+}
+}
+
+int alpha : 1 byte : .data
+char  vec : 3 * 1 byte : .data
+char state : 1 byte : .bss 
+char statham: 1 byte(truncated) : .data
+int i : 2 byte : stack 
+int looper : 2 byte : stack 
+
+
+//Home Assignment 6.2
+//Write the command for compiling a single c-file into an executable ELF file, see Appendix B.2
+//for details.
+
+avr-gcc -mmcu=atmega1284 -00 -g LedFlash.c -o LedFlash.elf -lyoda
+
+//Home Assignment 6.3
+//Write the command for extracting the .text and .data sections from the ELF file, using
+//qobjcopy, into an ihex file. Refer to Appendix B.3 for details.
+
+avt-objcopy -j .text .data -O ihex LedFlash.elf LedFlash.hex 
+
+//Home Assignment 6.4
+//How do you disassemble an ELF file using objdump showing only instructions?
+
+avr-objdump -d LedFlash.elf 
+
+
