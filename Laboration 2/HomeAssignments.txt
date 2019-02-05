@@ -10,11 +10,13 @@ Using a pointer to the address, how do you turn LED number 3 (only) on?
 • Set the data direction register to 0x01 (hexadecimal) or 0b00000001 (binary).
 • Set the pin PB0 to high by writing 0x01 or 0b00000001 to the port register. 
 
-*((char) 0x24) |= 0b00000100; // sätter portB till output på plats tre för lampa tre. 
-*((char) 0x25) |= 0b00000100; // sätter portB till high på plats tre för lampa tre. 
+int *ledInit = 0x24; // set pointer to address of DDRB
+int *ledData = 0x25; // set pointer to address of PORTB
 
+*ledInit |= 0b00000100 // set data direction to output for led3
+*ledData |= 0b00000100 // set IO to high for led3 
 
-//Home Assignment 1.2
+ //Home Assignment 1.2
 
 The buttons are connected to Port A. The address to the input register is as shown in Table 1.2.
 Using a pointer to the address, how do you read the value of (only) button 4?
@@ -23,7 +25,53 @@ Using a pointer to the address, how do you read the value of (only) button 4?
 0x21 DDRA
 0x22 PORTA
 
-*((char) 0x21) |= (0 << 4); // sätter portA till input genom att sätta en 0:a på plats 4. 
-char *val = *((volatile char*) 0x20) // läser från pinA
+int *buttonInit = 0x21; // set pointer to address of DDRA
+int *buttonData = 0x20; // set pointer to address of PINA 
+
+*buttonInit  |= 0b00000000; // set data direction to input 
+*buttonData |= 0b001000; // set io to high for button 4
+
+// Home Assignment 1.3
+
+When pressing a mechanical button, do you get a perfectly clean signal? If no, how do we
+handle such situations?
+
+No, we don't! An approach is to sample the switch signal at a regular interval and filter out all glitches. 
+
+// Home Assignment 1.4 
+
+Setup a variable to act as a shift register, initialise it to xFF.
+ 2 Setup a regular sampling event, perhaps using a timer. Use a period of about 1ms.
+
+Setup a variable to act as a shift register, initialise it to xFF.
+Setup a regular sampling event, perhaps using a timer. Use a period of about 1ms.
+
+On a sample event:
+    Shift the variable towards the most significant bit
+    Set the least significant bit to the current switch value
+     if shift register val=0 then
+      Set internal switch state to pressed
+    else
+      Set internal switch state to released
+   end if
+
+//Home Assignment 2.1
+
+How do you enable the transmitter and receiver for USART0?
+
+UCSR0B |= 0b00011000; // sets the RXEN and TXEN bits to 1 
+
+//Home Assignment 2.2
+
+How do you set the data length to 8 bits and 1 stop bit for USART0?
+
+UCSR0C |= 0b00000011;
+
+
+
+
+
+
+
 
 

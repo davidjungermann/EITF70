@@ -1,9 +1,9 @@
-#include "yoda.h"
+#include <yoda.h>
 
 int main()
 {
-    *((char) 0x24) |= 0b00000001; // sätter led 1 till output
-    *((char) 0x21) |= 0b00000001; // sätter knapp 1 till input
+    led_init();    // Initierar led-lampor
+    button_init(); // Initierar buttom
 
     unsigned int current; // gällande tillstånd
     unsigned int previous = 0; // föregående tillstånd
