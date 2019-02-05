@@ -99,3 +99,41 @@ avt-objcopy -j .text .data -O ihex LedFlash.elf LedFlash.hex
 avr-objdump -d LedFlash.elf 
 
 
+
+Lab question 6.1:
+
+If a while-loop wasn't used, it would only flash once. 
+
+Lab question 6.2: 
+
+The char a is placed in r24, with a hex value of 65. 
+
+b is placed in two registers, r24 and r25, and are assinged 254 and 255 respectively 
+
+c is too big for the 8 bit int, which means it's truncated to 0x39 or 57 decimal. 
+
+d is placed in two registers, with a total value of 539, where 05 is placed in r25, which means we are using
+little endian. 
+
+Lab question 2.1:
+
+It's never toggled.
+
+Lab question 2.2: 
+
+If we use a regular int instead, it works as intented, since it can be 0. An unsigned int can never be negative. 
+
+Lab question 2.3: 
+
+More than 1 byte, since we then can see how the bits are divided. 
+
+Lab question 2.4: 
+
+Little Endian, since the LSB is stored first. 
+
+Lab question 2.5: 
+
+It's stored in order, with the first element first in memory. Ie, it does not conform to memory! 
+
+
+

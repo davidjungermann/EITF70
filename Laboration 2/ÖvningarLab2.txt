@@ -1,1 +1,272 @@
-Test
+C Programming
+
+1.1 What is 12 | 1?
+
+60 = 111100 13 = 1101 
+
+1 1 1 1 0 0
+0 0 1 1 0 1
+1 1 1 1 0 1 = 61
+
+12 = 1100 1 = 1
+
+1 1 0 0
+0 0 0 1
+1 1 0 1 = 13 
+
+1.2 What is 12 & 1?
+
+1 1 0 0
+0 0 0 1
+0 0 0 0 = 0 
+
+1.3 What is 1 << 3?
+
+1 = 0 0 0 1
+Shifting three steps to the left yields:
+
+1 0 0 0 = 8
+
+
+1.4 What is 3 << 1?
+
+3 = 0011 ->
+
+0110 = 6
+
+
+1.5 What is 3 >> 4?
+
+3 = 0011 -> 0000 = 6
+
+1.6 What is 11 | (1 << 2)?
+
+1 = 0001 -> 0100
+
+1 0 1 1
+0 1 0 0
+1 1 1 1 = 15
+
+
+1.7 What is ~(1 << 2)?
+
+0001 0100 = 4
+
+255 - 4 = 251
+
+1.8 What is 255 & ~(1 << 5)?
+
+00100000 = 32
+
+255 - 32 = 223 
+
+11111111
+11011111 
+11011111 = 223 
+
+1.9 Using the pointer, char *p, how do you read the value on address 0x1337?
+
+char *val = *((char*) 0x1337)
+
+1.10 Using the pointer, char *p, how do you read the value from an input port on address 0x1337?
+
+char *val = *((volatile char*) 0x1337)
+
+1.11 Using the pointer, char *q, how do you write the value 42 to address 0x0666?
+
+*((char) 0x0666) = 42
+
+1.12 You have declared a variable, int a. What is the address of variable a?
+
+int addr* = &a  
+
+I/O Devices
+
+1.13 Assume you have 8 LEDs connected to a port, Port G. How would you configure the data direction
+register (DDRG) for that port?
+
+DDRG  |= 0xFF
+
+
+1.14 Assume the configuration as above, which register (PING and PORTG) would you read from / write
+to?
+
+Read and write to PORTG since the LEDs are outputs. 
+
+
+1.15 Assume that a pacemaker is connected to the H port, using the 4 most significant pins, sending an
+A/D converted value 4 bits at a time, how would you read the numerical value from it, the lowest value
+being 0? Remember that the port is configured as an input.
+
+Since the pacemaker is an input the PINH register would be used. 4 pins are used, which yields 2^4 = 16 
+
+256 - 16 = 240 => F0
+
+char val = (PINH & 0xF0) >> 4
+
+1.16 The medical company manufacturing the pacemaker realizes that 4 bits is not enough for transmitting
+data, and now wants to use 8 bits instead. However, we only have 4 available pins on the microcontroller.
+Assume that the pacemaker now first sends the lower half of an 8 bit number, then sends the upper
+half of that number (using the same pins as before). How do you, in two consecutive reads, read and
+store the full 8 bit value?
+
+char val = (PINH & 0xF0) >> 4 | (PINH & 0xF0)
+
+1.17 You are controlling a servo motor for an Amazon drone to open a hatch for releasing packages. The
+servo motor expects a pulse every 20 ms. The angle of the servo motor is proportional to the pulse
+width. Sending a pulse with a width of 2 ms fully opens the hatch, whereas a pulse width of 1 ms
+closes the hatch. A global variable release is set to 1 when you should open the hatch. You should
+send the pulse to open the hatch for as long as the variable is equal to 1, and send the pulse for closing
+the hatch when the variable returns to 0. The servo motor is connected to Pin 3 (counting from 0) on
+Port M. Implement a program controlling the hatch on the drone.
+
+Ans: 
+Pulse 20 ms. PW of 2ms opens the hatch, PW of 1ms closes the hatch. Global variable release is set to 1 when the hatch should be
+opened. Send pulse to open when release = 1, send pulse to close when release = 0. Pin 3, port M. 
+
+#define F_CPU 16000000 UL
+#include <util/delay.h>
+
+uint8_t release;
+
+int main(){
+    DDRM |= (1 << 3); // pin 3 as output. 
+
+    while(1) {
+        if(release) { // send pulse to keep hatch open 
+            PORTM |= (1 << 3); // pin to high
+            _delay_ms(2);
+            PORTM &= ~(1 << 3);
+            _delay_ms(18); 
+        } else {
+            PORTM |= (1 << 3);
+            _delay_ms(1);
+            PORTM &= ~(1 << 3); 
+            _delay_ms(19);
+        }
+    }
+}
+
+Communication
+2.1 The maximum transfer speed in the Atmega is 2.5 Mbit/s. What is the fastest transfer speed of the
+SATA protocol used for SSD drives in a modern computer? What about USB 3.0?
+
+Sata 3.2 has a transmission speed of 16 GBit/s. USB 3.1 has a transmission speed of 10 GBit/s. 
+
+2.2 Using UART with 1 start bit and 1 stop bit, sending data 8 bits, how much overhead do you get?
+
+2 bits, ie. 2/10 bits, 20%. 
+
+2.3 Using the UART above, transmitting bits at 1 Mbit/s (including start and stop bits), what is the
+effective transmission rate (excluding control bits)?
+
+1000 bit/s. 20% are control bits, which yields an effective rate of 0.8 Mbit/s or 8 kbit/s. 
+
+2.4  
+
+val = 103
+
+#define F_CPU 16000000 UL
+#include <util/delay.h>
+
+void send_message(char *); // vad händer här? 
+
+uint8_t hours;
+uint8_t minutes;
+    
+int main(){
+    set_baud(103); 
+    set_control(0x0D); // vad händer här?
+
+    while(1){
+        if((hours == 6) && (minutes == 30) ){
+            send_message("L1: on");
+            send_message("TV: 4);
+        } else if((hours == 7) && (minutes == 15)){
+            send_message("TV: 0");
+            send_message("L2: on");
+        } else if((hours == 7) && (minutes == 45)){
+            send_message("L1:off");
+            send_message("L2:off");
+        } else if((hours == 12) && (minutes == 00)) {
+            send_message("L2: on");
+        } else if((hours == 17) && (minutes == 30)){
+            send_message("TV:6");
+            send_message("L1:on");
+        } else if((hours == 22) &&(minutes == 00)) {
+            send_message("TV:off");
+            send_message("L1:off");
+            send_message("L2:off");
+        }
+    }
+
+}
+
+void send_message(char *msg)
+{
+    while(*msg != '\0'){
+        send_char(*msg++);
+    }
+}
+
+
+Signals
+3.1 You have a continuous stream of pulses. The pulses are high (5V) for 20 ms, and low (0V) for 60 ms.
+
+(a) What is the period time of the signal?
+
+D = PW/T, where D = duty cycle, PW = pulse width, T = period. 
+
+T = 20 + 60 = 80 ms
+
+(b) From above, what is the frequency of the signal?
+
+1/(80*10^3) =  12.5 hz
+(c) From above, what is the duty cycle?
+
+20/80 = 0.25
+
+3.2 See Lab instructions!
+
+------ 
+
+Se lösning...
+
+3.3 What is the RMS value for a general square wave with amplitude Vp and duty cycle D? Use the
+integral formula above.
+
+V*sqrt(D)
+
+3.4 Suppose you have a heater at home that you want to control using PWM. You measured the voltage to
+the heater when it has a comfortable temperature. The measured value is 10V DC. You have a relay
+capable of handling 25V, which you can control using PWM. What do you need to set the duty cycle
+to in order to get the same power to the heater, thus the same temperature?
+
+Vp = 25v Urms = 10v, using V*sqrt(D) and solving for D we get (10/25)^2. This yields a duty cycle of 
+0.16
+
+4.1 Assume you have signal with 5V amplitude. Assume you AD convert the signal, using a 5V reference
+and 10 bit resolution.
+
+(a) How many millivolts (mV) per bit do we get?
+
+5/(2^10) = 5mv/bit 
+(b) What is the largest conversion error (in mV)?
+
+The largest error is half the value per bit, 2.44 mV.
+
+4.2 See lab instructions!
+
+4.3 See lab instructions! 
+
+5.1 Assume a 16-bit timer running at 1 MHz,
+
+(a) What is the timer value after 64 ms?
+
+Each clock cycle takes 1 µs. 64 ms is 64000 clock cycles
+
+(b) What is the timer value after 67 ms? Why is this? Can we solve the problem?
+
+We are counting mod 2
+16, hence the timer value is 67000 mod 216 = 1464. We solve this by
+another counter increasing every timer overflow.
