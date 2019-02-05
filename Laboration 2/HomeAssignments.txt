@@ -23,7 +23,7 @@ Using a pointer to the address, how do you read the value of (only) button 4?
 0x21 DDRA
 0x22 PORTA
 
-*((char) 0x21) |= (0 << 4); // sätter portA till input genom att sätta
+*((char) 0x21) |= (0 << 4); // sätter portA till input genom att sätta en 0:a på plats 4. 
 char *val = *((volatile char*) 0x20) // läser från pinA
 
 
