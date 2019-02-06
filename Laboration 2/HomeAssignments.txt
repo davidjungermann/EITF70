@@ -59,7 +59,12 @@ On a sample event:
 
 How do you enable the transmitter and receiver for USART0?
 
+In order to set up the transmitter and receiver the RXEN and TXEN bits need to be set!
+
 UCSR0B |= 0b00011000; // sets the RXEN and TXEN bits to 1 
+
+UCSR0B = (1<<RXEN0)|(1<<TXEN0); // shifting in a one to the place of the correct bit. 
+
 
 //Home Assignment 2.2
 
@@ -67,6 +72,107 @@ How do you set the data length to 8 bits and 1 stop bit for USART0?
 
 UCSR0C |= 0b00000011;
 
+UCSR0C = (0<<USBS0)|(3<<UCSZ00); 
+
+//Home Assignment 2.3
+
+How do you set the baud rate for USART0? You are free to choose any applicable value.
+
+UBRR0H = (68 >> 8);
+UBRR0L = 68;
+
+//Home Assignment 2.4
+
+How do you read the received data from the USART0? Remember that you need to wait until
+there is data to read.
+
+First, check whether the RXC0-flag in the USCSR0A is set to 1, indicating that there is data to read in the buffer. 
+Then read all the data from the buffer and return it! 
+
+unsigned char USART_Receive( void )
+
+{
+ /* Wait for data to be received */
+ while ( !(UCSR0A & (1<<RXC0)) )
+;
+/* Get and return received data from buffer */
+ return UDR0;
+}
+
+
+//Home Assignment 2.5
+
+How do you transmit data via USART0?
+
+Check whether the transmit buffer is ready to recieve new data by checking the UDRE0 flag. If this flag is set to 1, the buffer
+is empty and is ready to be written to. Then put the data in the buffer, which then transmits it! 
+
+void USART_Transmit( unsigned char data )
+{
+ /* Wait for empty transmit buffer */
+ while ( !( UCSR0A & (1<<UDRE0)) )
+ ;
+ /* Put data into buffer, sends the data */
+ UDR0 = data;
+}
+
+//Home Assignment 2.6
+
+Develop a simple protocol that can be used to turn one or several LED’s, connected to PORTB,
+on or off. There should be 8 bytes of data, that is, one byte per LED.
+
+//Home Assignment 3.1
+
+How do you configure Timer 3 to generate a Fast PWM signal? Look at TCCR3A and TCCR3B
+register in the datasheet.
+
+//Home Assignment 3.2
+
+How do you configure Timer 3 to use a prescaler value of 1024? Look at the description of
+TCCR3B register in the datasheet.
+
+//Home Assignment 3.3
+
+How can Pin PB6 in Port B be configured to be an output? This pin is connected to the timer’s
+output compare logic which generates the PWM signal.
+
+//Home Assignment 4.1
+
+How do you enable the ADC?
+
+//Home Assignment 4.2
+
+In order to get reliable conversion, the frequency of the ADC should lie between 50kHz and
+200kHz. How do you configure the prescaler to meet this requirement?
+
+//Home Assignment 4.3
+
+The left and right potentiometers are connected to Channel 0 and 1, respectively. How do you
+configure the ADC to select one of these two? (Hint x 2! Check the schematic to see where the
+potentiometers are connected. Also, the ADC should in Single Ended Input configuration.)
+
+//Home Assignment 4.4
+
+How do you configure the ADC to have AVCC as the reference voltage?
+
+//Home Assignment 4.5
+
+How do you start a conversion and read the converted signal from the ADC? Remember that
+you need to wait until the conversion is done
+
+//Home Assignment 5.1
+
+How long does it take for the sound to travel to an obstacle at 0.5m (and back!)? Assume that
+the sound travels 340m/s.
+
+//Home Assignment 5.2
+
+Using timer/counter 1, what is the best prescaler value? Hint! The goal is to take advantage
+of the timer/counter resolution.
+
+//Home Assignment 5.3
+
+Assume the timer value TCNT1 is 13337, how far away is the obstacle?
 
 
 
