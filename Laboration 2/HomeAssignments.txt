@@ -172,7 +172,7 @@ of the timer/counter resolution.
 
 //Home Assignment 5.3
 
-Assume the timer value TCNT1 is 13337, how far away is the obstacle?
+    Assume the timer value TCNT1 is 13337, how far away is the obstacle?
 
 
 
