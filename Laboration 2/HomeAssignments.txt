@@ -41,7 +41,7 @@ No, we don't! An approach is to sample the switch signal at a regular interval a
 // Home Assignment 1.4 
 
 Setup a variable to act as a shift register, initialise it to xFF.
- 2 Setup a regular sampling event, perhaps using a timer. Use a period of about 1ms.
+  Setup a regular sampling event, perhaps using a timer. Use a period of about 1ms.
 
 Setup a variable to act as a shift register, initialise it to xFF.
 Setup a regular sampling event, perhaps using a timer. Use a period of about 1ms.
@@ -119,31 +119,51 @@ void USART_Transmit( unsigned char data )
 //Home Assignment 2.6
 
 Develop a simple protocol that can be used to turn one or several LED’s, connected to PORTB,
-on or off. There should be 8 bytes of data, that is, one byte per LED.
+on or off. There should be 8 bytes of data, that is, one byte per LED. 
+
+Header       Trailer    LedOn       LedOff
+11110000     00001111   11111111    00000000 
+
+
 
 //Home Assignment 3.1
 
 How do you configure Timer 3 to generate a Fast PWM signal? Look at TCCR3A and TCCR3B
-register in the datasheet.
+register in the datasheet. 
+
+The bits should be set so that
+the OC3A or OC3B pin gets cleared on a compare match. 
+
+TCCR3A = (1 << COM3A1)|(0 << COM3A0)
+TCCR3B = (1 << COM3B1)|(0 << COM3B0)
 
 //Home Assignment 3.2
 
 How do you configure Timer 3 to use a prescaler value of 1024? Look at the description of
 TCCR3B register in the datasheet.
 
+TCCR3B = (1 << CS32)|(0 << CS31)|(1 << CS30);
+
 //Home Assignment 3.3
 
 How can Pin PB6 in Port B be configured to be an output? This pin is connected to the timer’s
 output compare logic which generates the PWM signal.
 
+PORTB = (1 << PB6);
+DDRB = (1 << DDB6);
+
 //Home Assignment 4.1
 
 How do you enable the ADC?
+
+ADCSRA = (1 << ADEN); 
 
 //Home Assignment 4.2
 
 In order to get reliable conversion, the frequency of the ADC should lie between 50kHz and
 200kHz. How do you configure the prescaler to meet this requirement?
+
+ADCSRA = (7 << ADPS0); // vad är skillnaden mellan 0, 1 och 2 i registernamnet?     
 
 //Home Assignment 4.3
 
@@ -151,14 +171,21 @@ The left and right potentiometers are connected to Channel 0 and 1, respectively
 configure the ADC to select one of these two? (Hint x 2! Check the schematic to see where the
 potentiometers are connected. Also, the ADC should in Single Ended Input configuration.)
 
+ADMUX = (0 << MUX4)|(0 << MUX3)|(0 << MUX2)|(0 << MUX1)|(0 << MUX0); 
+
 //Home Assignment 4.4
 
 How do you configure the ADC to have AVCC as the reference voltage?
+
+ADMUX = (0 << REFS1)|(1 << REFS0);
 
 //Home Assignment 4.5
 
 How do you start a conversion and read the converted signal from the ADC? Remember that
 you need to wait until the conversion is done
+
+PRR0 = (0 << PRADC);
+ADCSRA = (1 << ADSC); 
 
 //Home Assignment 5.1
 
