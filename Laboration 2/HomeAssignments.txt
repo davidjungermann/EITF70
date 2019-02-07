@@ -24,7 +24,6 @@ Using a pointer to the address, how do you read the value of (only) button 4?
 0x20 PINA
 0x21 DDRA
 0x22 PORTA
-
 int *buttonInit = 0x21; // set pointer to address of DDRA
 int *buttonData = 0x20; // set pointer to address of PINA 
 
@@ -192,14 +191,25 @@ ADCSRA = (1 << ADSC);
 How long does it take for the sound to travel to an obstacle at 0.5m (and back!)? Assume that
 the sound travels 340m/s.
 
+0.0029 sec or 2.9 ms 
+
 //Home Assignment 5.2
 
 Using timer/counter 1, what is the best prescaler value? Hint! The goal is to take advantage
 of the timer/counter resolution.
 
+TCCR1B = (0<<CS12)|(1<<CS11)|(0<<CS10) // varför 010?? 
+
 //Home Assignment 5.3
 
-    Assume the timer value TCNT1 is 13337, how far away is the obstacle?
+Assume the timer value TCNT1 is 13337, how far away is the obstacle?
+
+13337*340*(2*10^-6)/2 = 4.53458 
+
+s = v*t 
+
+
+
 
 
 
