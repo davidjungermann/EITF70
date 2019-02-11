@@ -1,0 +1,50 @@
+1.1:
+Yes, sometimes it flashes. Adding a delay fixes this. 
+
+2.1: 
+When lowering the baud rate we get various delays and errors in the echoing. We also get weird characters
+
+2.2: 
+No, it doesn't work at all! A NUL is echoed on screen. 
+
+3.1: 
+16 MHz - > Period = 1/(16*10^6) s = 62.5 nanosec 
+
+3.2:
+See code 
+
+3.3: 
+64 microsec 
+
+3.4: 
+
+D = PW/T 
+
+255 / 65535 = 0.003891 
+
+3.5: 
+
+500
+
+3.6: 
+
+When we use 500 as a value, we only need 9 bits, which means we have 7 bits unused.
+
+0000000111110100
+
+3.7: 
+
+9/16
+
+5.1:
+
+About 8000, hard to see what 10cm really is. 
+
+5.2: 
+
+Signalen blir utstörd och kommer inte komma tillbaka till sensorn. 
+
+
+
+
+
